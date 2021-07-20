@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
 @section('title','Listagem Categorias')
-{{dd($categories)}}
+
 @section('content_header')
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"><a href="{{route('admin')}}" >DashBoard</a></li>
     <li class="breadcrumb-item active"><a href="{{route('categories.index')}}" class="active">Categories</a></li>
-    <li class="breadcrumb-item "><a href="{{route('categories.show',$categories->id)}}" >Detalhes</a></li>
+   
 
 </ol>
 <h1> Categorias
@@ -20,16 +20,21 @@
 
 @section('content')
    <div class="content">
-       <div class="box box-success">
-           <div class="box box-success">
-               <div class="box-body">
+       <div class="card">
+           <div class="card-header box-success">
+               <div class="card-title">
+                   Listar Categorias
+               </div>
+           </div>
+              
+               <div class="card-body">
                    @include('admin.includes.alerts')
                    <form action="{{route('categories.search')}}" class="form form-inline" method="POST">
                     @csrf   
-                    <input type="text" name="title" placeholder="Titulo" class="form-controll" value="{{$data['title'] ?? '' }}">
-                    <input type="text" name="url" placeholder="url" class="form-controll" value="{{$data['url'] ?? '' }}">
-                    <input type="text" name="description" placeholder="Descrição" class="form-controll"  value="{{$data['description'] ?? '' }}">
-                       <button type="submit" class="btn btn-success">Pesquisar</button>
+                    <input type="text" name="title" placeholder="Titulo" class="form-control" value="{{$data['title'] ?? '' }}">
+                    <input type="text" name="url" placeholder="url" class="form-control" value="{{$data['url'] ?? '' }}">
+                    <input type="text" name="description" placeholder="Descrição" class="form-control"  value="{{$data['description'] ?? '' }}">
+                       <button type="submit" class="ml-2 btn btn-success">Pesquisar</button>
                    </form>
                    @if (isset($data))
                    <a href="{{route('categories.index')}}"> (x) Limpar Resultados da Pesquisa</a>

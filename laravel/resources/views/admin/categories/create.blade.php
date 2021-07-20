@@ -8,11 +8,9 @@
 </h1>
 
 <ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="{{route('admin')}}" >DashBoard</a></li>
-    <li class="breadcrumb-item active"><a href="{{route('categories.index')}}" >Categories</a></li>
-    <li class="breadcrumb-item "><a href="{{route('categories.create')}}" class="active" >Create</a></li>
-    <li class="breadcrumb-item "><a href="" >Detalhes</a></li>
-
+    <li><a href="{{ route('admin') }}">Dashboard</a></li>
+    <li><a href="{{ route('categories.index') }}">Categorias</a></li>
+    <li><a href="{{ route('categories.create') }}" class="active">Cadastrar</a></li>
 </ol>
 
 @stop 

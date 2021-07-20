@@ -7,12 +7,10 @@
     Categoria: {{$category->title}}
 </h1>
 <ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="{{route('admin')}}" >DashBoard</a></li>
-    <li class="breadcrumb-item active"><a href="{{route('categories.index')}}" >Categories</a></li>
-    <li class="breadcrumb-item "><a href="{{route('categories.show',$categories->id)}}" class="active" >Detalhes</a></li>
-
+    <li class="breadcrumb-item"><a href="{{ route('admin') }}" >Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Categorias</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('categories.show', $category->id) }}" class="active">Detalhes</a></li>
 </ol>
-
 @stop 
 
 @section('content')

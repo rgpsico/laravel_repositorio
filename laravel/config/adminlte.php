@@ -231,7 +231,7 @@ return [
             'url' => 'admin/categories',
         ],
         [
-            'text'         => 'pages',
+            'text'         => 'Produtos',
             'url' => 'admin/products',
             'icon' => 'file',         
       

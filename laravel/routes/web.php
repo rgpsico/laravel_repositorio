@@ -2,7 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 
+
+Route::any('admin/products/search',[ProductController::class,'search'])->name('products.search');;
+Route::resource('admin/products', ProductController::class);
 
 Route::post('/admin', function () {
     
