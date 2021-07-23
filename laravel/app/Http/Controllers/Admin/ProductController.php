@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateProductFormRequest;
 use App\Models\Category;
+
 use Illuminate\Http\Request;
-use App\Models\Product;
+
 
 class ProductController extends Controller
 {
-    protected $product;
+    protected $repository;
 
-    public function __construct(Product $product)
-    {
-        $this->product = $product;
-        
+    public function __construct(ProductRepositoryInterface $repository)
+    {      
+        $this->repository = $repository;
     }  
 
 
@@ -27,7 +28,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-       $products = $this->product->with('category')->paginate();
+       $products = $this->repository
+                    ->orderBy('id')
+                    ->relationships('category')
+                    ->paginate();
+                    
        return view('admin.products.index',compact('products'));
 
     }
@@ -69,9 +74,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-       $product = $this->product->with('category')->where('id',$id)->first();
+       $product = $this->repository->findWhereFirst('id',$id);
 
-       if(!$product = $this->product->find($id)){
+       if(!$product = $this->repository->findById($id)){
            return redirect()->back();
        }
 
@@ -88,7 +93,7 @@ class ProductController extends Controller
     public function edit($id)
     {       
       
-       if(!$product =  $this->product->find($id)){
+       if(!$product =  $this->repository->findById($id)){
            return redirect()->back();
        }
 
@@ -104,12 +109,9 @@ class ProductController extends Controller
      */
     public function update(StoreUpdateProductFormRequest $request, $id)
     {
- 
-        $data = $request->all();
-       
-       $product = $this->product->find($id);
 
-       $product->update($data);
+
+      $this->repository->update($id,$request->all());
       
        return redirect()
        ->route('products.index')
@@ -124,7 +126,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-      $this->product->find($id)->delete();
+      $this->repository->delete($id);
       return redirect()
             ->route('products.index')
             ->withSuccess("Deletado com Sucesso");
@@ -134,37 +136,7 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $filters = $request->except('_token');
-        $products = $this->product
-                   ->with('category')
-                    ->where(function($query) use ($request) {
-                            if($request->name)
-                            {        
-                             $filter = $request->name;                    
-                             $query->where(function($querySub) use ($filter) {
-                             $querySub->where('name', 'LIKE', "%{$filter}%")
-                                     ->orWhere('description', 'LIKE' ,"%{$filter}%");
-                               });
-                            }
-
-                            if($request->price)
-                           {
-                            $query->where('price',$request->price);
-         
-                           }
-
-                           if($request->category)
-                           {
-                            $query->orWhere('category_id',$request->category);
-         
-                           }
-                        
-                        
-                        })->paginate(1);
-   
-
-     
-      
-
+        $products = $this->repository->search($request);
         return view('admin.products.index',compact('products','filters'));
 
 

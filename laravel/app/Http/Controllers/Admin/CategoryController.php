@@ -4,10 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateCategoryFormRequest;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class CategoryController extends Controller
 {
+
+    protected $repository;
+
+  public function __construct(CategoryRepositoryInterface $repository)
+  {
+      $this->repository = $repository;
+      
+  }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,9 +25,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-       $categories = DB::table('categories')
-       ->orderBy('title','ASC')
-       ->paginate();
+      
+       $categories = $this->repository->orderBy('id')->paginate();
        return view('admin.categories.index',compact('categories'));
     }
 
@@ -39,10 +48,9 @@ class CategoryController extends Controller
      */
     public function store(StoreUpdateCategoryFormRequest $request)
     {
-      DB::table('categories')->insert([
-         'title' => $request->title,
-         'url'   => $request->url,
-         'description' => $request->description
+        $this->repository->store([
+            'title' => $request->title,      
+            'description' => $request->description
       ]);
 
       return redirect()->route('categories.index')
@@ -57,7 +65,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = DB::table('categories')->where('id',$id)->first();
+        $category = $this->repository->findById($id);
         if(!$category){
             return redirect()->back();
 
@@ -74,7 +82,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = DB::table('categories')->where('id',$id)->first();
+        $category = $this->repository->findById($id);
          if(!$category){
              return redirect()->back();
 
@@ -91,11 +99,9 @@ class CategoryController extends Controller
      */
     public function update(StoreUpdateCategoryFormRequest $request, $id)
     {
-       DB::table('categories')
-       ->where('id',$id)
-       ->update([
+        $this->repository->update($id ,[
         'title' => $request->title,
-        'url'   => $request->url,
+    
         'description' => $request->description
      ]);
      return redirect()->route('categories.index');
@@ -109,43 +115,14 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-       DB::table('categories')->where('id',$id)->delete();
+        $this->repository->delete($id);
        return redirect()->route('categories.index');
     }
 
     public function search(Request $request)
     {
         $data = $request->except('_token');
-
-        /*
-       $categories =  DB::table('categories')
-                ->where('title',$search) 
-                ->orWhere('url',$search)
-                ->orWhere('description','LIKE', "%{$search}%")
-                ->get();
-                return view('admin.categories.index',compact('categories','search'));
-                */
-
-           $categories = DB::table('categories')
-                                ->where(function($query) use($data){
-                                    if(isset($data['title']))
-                                    {
-                                    $query->where('title',$data['title']); 
-                                    }    
-                                    
-                                    if(isset($data['url']))
-                                    {
-                                    $query->orWhere('url',$data['url']); 
-                                    }
-
-                                    if(isset($data['description']))
-                                    {
-                                    $desc = $data['description'];
-                                    $query->where('description','LIKE',"%{$desc}%"); 
-                                    }
-
-                                })->orderBy('id','desc')
-                                  ->paginate();              
-                                return view('admin.categories.index',compact('categories','data'));
+             $categories =  $this->repository->search($data);                                     
+                return view('admin.categories.index',compact('categories','data'));
     }
 }

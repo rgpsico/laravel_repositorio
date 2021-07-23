@@ -3,10 +3,10 @@
                        <input type="text" name="title" value="{{$category->title ?? old('title')}}" class="form-control" placeholder="Titulo">
                    </div>
 
-                   <div class="form-group">
+                   <!--<div class="form-group">
                        
                         <input type="text" name="url" class="form-control"  value="{{$category->url ?? old('url')}}" placeholder="url">
-                    </div>
+                    </div>-->
 
                 <div class="form-group">
                  
