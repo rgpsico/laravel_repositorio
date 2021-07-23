@@ -225,15 +225,30 @@ return [
     */
 
     'menu' => [
+        'Opções',
+        
+        [
+            'text' => 'DashBoard',
+            'url' => 'admin',
+            'icon'=> 'fa-car-bus',
+        ],
       
         [
-            'text'         => 'Categorias',
+            'text' => 'Categorias',
             'url' => 'admin/categories',
+            'icon'=> 'object-group',
         ],
         [
-            'text'         => 'Produtos',
+            'text' => 'Produtos',
             'url' => 'admin/products',
-            'icon' => 'file',         
+            'icon' => 'tasks',         
+      
+        ],
+
+        [
+            'text' => 'Usuarios',
+            'url' => 'admin/users',
+            'icon' => 'users',         
       
         ],
     ],
