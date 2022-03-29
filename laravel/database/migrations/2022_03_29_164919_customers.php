@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Categories extends Migration
+class Customers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,18 @@ class Categories extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title')->unique();
-            $table->string('url')->unique();
-            $table->text('description')->nullable();
+            $table->unsignedInteger('user_id');
+            $table->string('name');
+            $table->string('contacted_at')->nullable();
+            $table->integer('active')->index();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 

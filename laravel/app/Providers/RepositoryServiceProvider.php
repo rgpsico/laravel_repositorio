@@ -5,8 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 
 use App\Repositories\Core\Eloquent\{
-EloquentProductRepository,
-EloquentCategoryRepository,
+    EloquentProductRepository,
+    EloquentCategoryRepository,
     EloquentUsersRepository
 };
 
@@ -35,19 +35,19 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ProductRepositoryInterface::class,
             EloquentProductRepository::class
-          );
+        );
 
-          $this->app->bind(
+        $this->app->bind(
             CategoryRepositoryInterface::class,
-           QueryBuilderCategoryRepository::class,
-           //EloquentCategoryRepository::class
-          );
+            QueryBuilderCategoryRepository::class,
+            //EloquentCategoryRepository::class
+        );
 
-          $this->app->bind(
-             UsersRepositoryInterface::class,
-             EloquentUsersRepository::class,
-           //EloquentCategoryRepository::class
-          );
+        $this->app->bind(
+            UsersRepositoryInterface::class,
+            EloquentUsersRepository::class,
+            //EloquentCategoryRepository::class
+        );
     }
 
     /**
